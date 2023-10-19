@@ -5,7 +5,6 @@
 - [Introduction](#introduction)
 - [Features](#features)
 - [Data summary](#Data_summary)
-- [Queries and insights](#Queries_and_insights)
 - [Excel dashboard](#Excel_dashboard)
 - [Recommendations](#Recommendations)
 
@@ -30,200 +29,35 @@ Time-based Analysis: Analyze sales trends based on different time periods such a
 weekly, and monthly, to spot seasonality and demand patterns.
 
 
-# Queries and insights.
+# Data summary.
+The dataset is found on Maven Analytics under the name Pizza Place Sales with a total of 4 tables with 48,620 records and 12 fields.
 
-A)	KPI’s
+• Order Details
 
-1)Total Revenue:
+The table has the order_details_id which is the primary key of the table along with the order_id, pizza_id as the foreign key of the orders and pizzas table and last, we have the quantity column of each type of pizza.
 
-SELECT SUM(total_price) AS Total_Revenue 
+• Orders
 
-FROM pizza_sales
+This table includes the order_id which is the primary key, and the date and time of each order.
 
+• Pizza Types
 
-   2)Average order value:
+We have the pizza_type_id as the primary key, along with each pizza's name, category and ingredients.
 
- SELECT SUM(total_price) / COUNT(DISTINCT order_id) AS Avg_Order_value
+• Pizzas
 
- FROM pizza_sales
+The pizzas table has the pizza_id as the primary key, and the pizza_type_id as the foreign key from the pizza types table, it also includes the size and price of the pizza.
 
 
-   3)Total Pizza Sold:
 
-     SELECT SUM(quantity) AS Total_Pizza_Sold 
 
-     FROM pizza_sales
 
 
-   4)Total Orders:
 
-     SELECT COUNT(DISTINCT order_id) AS Total_Orders 
 
-    FROM pizza_sales
 
-      
-   5)Average Pizzas per Order:
 
-   SELECT CAST( CAST(SUM(quantity) AS DECIMAL(12,2)) / CAST(COUNT (DISTINCT order_id)  AS   DECIMAL (10,2)) AS DECIMAL (10,2)) AS Avg_Pizza_Per_Orders 
 
-   FROM pizza_sales
-
-
-B)	Daily Trend for Total Orders:
-
-SELECT DATENAME( DW, order_date) AS Order_Day, COUNT(DISTINCT order_id) AS Total_Orders
-
-FROM pizza_sales
-
-GROUP BY DATENAME( DW, order_date)
-
-C)	Monthly Trend for Total Orders:
-
-SELECT DATENAME( MONTH, order_date) AS Order_Month, COUNT(DISTINCT order_id) AS Total_Orders
-
-FROM pizza_sales
-
-GROUP BY DATENAME( MONTH, order_date)
-
-  ORDER BY Total_Orders desc
-
-
-D)	% of Sales by Pizza Category:
-
-SELECT pizza_category,CAST( SUM(total_price) AS DECIMAL(10,2)) AS Total_Sales, 
-
-CAST(SUM(total_price) * 100 / (SELECT SUM(total_price) FROM pizza_sales) AS DECIMAL (10,2)) as PCT 
-
-FROM pizza_sales GROUP BY pizza_category
-
-
-
-E)	% of Sales by Pizza Size:
-
-SELECT pizza_size,CAST( SUM(total_price) AS DECIMAL(10,2)) AS Total_Sales, 
-
-CAST(SUM(total_price) * 100 / (SELECT SUM(total_price) FROM pizza_sales) AS DECIMAL (10,2)) AS PCT 
-
-FROM pizza_sales 
-
-GROUP BY pizza_size 
-
-ORDER BY PCT DESC
-
-
-
-F)	Total Pizzas Sold by Pizza Category:
-
-SELECT pizza_category, SUM( quantity) AS Total_Quantity_Sold
-
-FROM pizza_sales
-
-GROUP BY pizza_category
-
-ORDER BY Total_Quantity_Sold DESC
-
-
-G)	Top 5 Best Sellers by Revenue :
-
-SELECT TOP 5 pizza_name,SUM(total_price) AS Total_Revenue
-
-FROM pizza_sales
-
-GROUP BY pizza_name
-
-ORDER BY Total_Revenue DESC
-
-
-
-H)	 Bottom 5 Sellers by Revenue:
-
-SELECT TOP 5 pizza_name,SUM(total_price) AS Total_Revenue
-
-FROM pizza_sales
-
-GROUP BY pizza_name
-
-ORDER BY Total_Revenue ASC
-
-
-I)	Top 5 Sellers by Quantity:
-
-SELECT TOP 5 pizza_name,SUM(quantity) AS Total_Pizza_Sold
-
-FROM pizza_sales
-
-GROUP BY pizza_name
-
-ORDER BY Total_Pizza_Sold DESC
-
-
-J)	Bottom 5 Sellers by Quantity  :
-
-SELECT TOP 5 pizza_name,SUM(quantity) AS Total_Pizza_Sold
-
-FROM pizza_sales
-
-GROUP BY pizza_name
-
-ORDER BY Total_Pizza_Sold ASC
-
-
-
- 
-
-     
-
-K)	Top 5 Sellers by Total Orders:
-
-SELECT TOP 5 pizza_name,COUNT(DISTINCT order_id) AS Total_Orders
-
-  FROM pizza_sales
-
-GROUP BY pizza_name
-
-ORDER BY Total_Orders DESC
-
-
-
- 
-
-
-
-
-
-L)	Bottom 5 Sellers by Total Orders:
-
-SELECT TOP 5 pizza_name,COUNT(DISTINCT order_id) AS Total_Orders
-
-FROM pizza_sales
-
-GROUP BY pizza_name
-
-ORDER BY Total_Orders ASC
-
-
-
- 
-
-
-
-
-
-NOTE:
-
-If you want to apply the pizza_category or pizza_size filters to the above queries, you can use a WHERE clause. Follow some of the examples below 
-
-SELECT TOP 5 pizza_name, COUNT(DISTINCT order_id) AS Total_Orders
-
-FROM pizza_sales
-
-WHERE pizza_category = 'Classic'
-
-GROUP BY pizza_name
-
-ORDER BY Total_Orders ASC
-
-Which gives you the output below:
 
  
 
